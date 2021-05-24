@@ -13,39 +13,36 @@ const props = {
   newGames: [gamesMock[0]],
   mostPopularHighlight: highlightMock,
   mostPopularGames: [gamesMock[0]],
-  upcommingGames: [gamesMock[0]],
-  upcommingHighlight: highlightMock,
-  upcommingMoreGames: [gamesMock[0]],
+  upcomingGames: [gamesMock[0]],
+  upcomingHighlight: highlightMock,
+  upcomingMoreGames: [gamesMock[0]],
   freeGames: [gamesMock[0]],
   freeHighlight: highlightMock
 }
 
+jest.mock('components/Showcase', () => {
+  return {
+    __esModule: true,
+    default: function Mock() {
+      return <div data-testid="Mock showcase"></div>
+    }
+  }
+})
+
+jest.mock('components/BannerSlider', () => {
+  return {
+    __esModule: true,
+    default: function Mock() {
+      return <div data-testid="Mock banner slider"></div>
+    }
+  }
+})
+
 describe('<Home />', () => {
-  it('should render menu and footer', () => {
+  it('should render banner and showcases', () => {
     renderWithTheme(<Home {...props} />)
 
-    expect(screen.getByLabelText(/open menu/i)).toBeInTheDocument()
-    expect(
-      screen.getByRole('heading', { name: /follow us/i })
-    ).toBeInTheDocument()
-    expect(screen.getAllByRole('img', { name: /won games/i })).toHaveLength(2)
-
-    expect(screen.getByRole('heading', { name: /news/i })).toBeInTheDocument()
-    expect(
-      screen.getByRole('heading', { name: /most popular/i })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('heading', { name: /upcomming/i })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('heading', { name: /free games/i })
-    ).toBeInTheDocument()
-
-    // banner
-    expect(screen.getAllByText(/defy death 1/i)).toHaveLength(1)
-    // card game ( 5 sections com 4 cards cada = 5x4 = 20)
-    expect(screen.getAllByText(/population zero/i)).toHaveLength(5)
-    // highlight
-    expect(screen.getAllByText(/red dead is back!/i)).toHaveLength(3)
+    expect(screen.getByTestId('Mock banner slider')).toBeInTheDocument()
+    expect(screen.getAllByTestId('Mock showcase')).toHaveLength(5)
   })
 })
